@@ -98,6 +98,7 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 			beep = MediaPlayer.create(context, R.raw.beep)
 		} catch (e: Exception) {
 			//FirebaseCrash.report(e)
+			Log.d(TAG, "Error creating beep: $e")
 		}
 	}
 
@@ -294,7 +295,7 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 									beep?.start()
 								} catch (e: Exception) {
 									//FirebaseCrash.report(e)
-									Log.d(TAG, "")
+									Log.d(TAG, "Error playing beep: $e")
 								}
 							}
 						} else {

@@ -62,7 +62,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 		instrBut?.setOnClickListener {
 
-			saveData()
 			showInstructions()
 		}
 
@@ -98,10 +97,12 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 		// get preferences
 		loadData()
+		// set preferences
+		sensBar?.progress = prefsSensLvl
+		beeperBut?.isChecked = prefsBeeperOn
 
 		// start StudFView
-		mStudFView?.startStudFView(sensBar?.progress ?: 9,
-			beeperBut?.isChecked ?: true)
+		mStudFView?.startStudFView(prefsSensLvl, prefsBeeperOn)
 	}
 
 	override fun onPause() {
@@ -116,11 +117,8 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 	override fun onStop() {
 		super.onStop()
-
-		// increment Run Times variable for use in rating prompt and save
+		// count run times
 		prefsRunTimes++
-		saveData()
-
 		//Log.d(TAG, "Run times ->" + Integer.toString(prefsRunTimes));
 	}
 
@@ -176,7 +174,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		prefsSensLvl = sensBar?.progress ?: 9
 		prefsMagLocX = StudFView.magPosX.toInt()
 		prefsMagLocY = StudFView.magPosY.toInt()
-		val editor = getPreferences(MODE_PRIVATE).edit()
+		val editor = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE).edit()
 		editor.putBoolean("prefs_beeper_switch", prefsBeeperOn)
 		editor.putInt("prefs_sensitivity_level", prefsSensLvl)
 		editor.putInt("prefs_run_times", prefsRunTimes)
@@ -191,10 +189,10 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 	private fun loadData() {
 
-		// get preferences
-		val prefs = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
-		beeperBut?.isChecked = prefs.getBoolean("prefs_beeper_switch", false)
-		sensBar?.progress = prefs.getInt("prefs_sensitivity_level", 10)
+		// get shared preferences
+		val prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
+		prefsBeeperOn = prefs.getBoolean("prefs_beeper_switch", false)
+		prefsSensLvl = prefs.getInt("prefs_sensitivity_level", 10)
 		prefsRunTimes = prefs.getInt("prefs_run_times", 1)
 		prefsMagLocX = prefs.getInt("prefs_mag_loc_x", 80)
 		prefsMagLocY = prefs.getInt("prefs_mag_loc_y", 180)
