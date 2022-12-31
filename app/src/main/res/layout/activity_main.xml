@@ -51,7 +51,8 @@
                 android:layout_height="wrap_content"
                 android:onClick="onRemoveAdsPushed"
                 android:text="@string/remove_ads"
-                style="@style/materialButtStyle" />
+                style="@style/materialButtStyle"
+                android:enabled="false"/>
 
             <ToggleButton
                 android:id="@+id/beeperBut"

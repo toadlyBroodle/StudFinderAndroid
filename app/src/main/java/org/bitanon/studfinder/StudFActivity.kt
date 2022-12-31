@@ -105,7 +105,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		}
 
 		// direct traffic to MinimaList
-		showMinimalistPromo()
+		//showMinimalistPromo()
 	}
 
 	override fun onResume() {
@@ -334,7 +334,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		}
 	}*/
 
-	private fun showMinimalistPromo() {
+/*	private fun showMinimalistPromo() {
 		// show ridiculously convoluted confirmation dialog
 		val inflater = layoutInflater
 		val dialog = AlertDialog.Builder(this)
@@ -364,7 +364,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 	fun onMinimalistWatchDemo(view: View?) {
 		startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://jg5ms.app.goo.gl/tEi4")))
-	}
+	}*/
 
 	companion object {
 		@JvmField
