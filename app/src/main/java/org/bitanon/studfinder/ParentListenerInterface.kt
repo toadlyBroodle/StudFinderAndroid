@@ -6,5 +6,4 @@ package org.bitanon.studfinder
 interface ParentListenerInterface {
 	fun alert(str: String?)
 	fun updateUi()
-	fun setWaitScreen(boo: Boolean)
 }

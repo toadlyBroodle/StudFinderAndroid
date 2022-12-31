@@ -19,6 +19,7 @@ import kotlin.math.sqrt
 
 class StudFView(context: Context?, attributes: AttributeSet?) : View(context, attributes),
 	SensorEventListener {
+	val TAG = "StudFView"
 
 	var sensLvl = 9
 	var beepOn = true
@@ -245,7 +246,7 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 
 		// load bitmaps and scale according to screen size
 		val opts = BitmapFactory.Options()
-		opts.inDither = true
+		//opts.inDither = true
 		opts.inPreferredConfig = Bitmap.Config.RGB_565
 	}
 
@@ -386,7 +387,6 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 	}
 
 	companion object {
-		// private static final String TAG = "StudFView";
 		private const val ARRAYSIZE = 20
 		private const val INVALID_POINTER_ID = -10
 		var magPosX = 80f

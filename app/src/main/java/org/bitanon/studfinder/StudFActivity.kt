@@ -4,9 +4,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.Typeface
 import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Bundle
@@ -31,7 +28,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 	private var hideAdsBut: Button? = null
 
 	private var sensTextView: TextView? = null
-	private var mLoadingView: TextView? = null
 	private var mUIRelLay: RelativeLayout? = null
 	private var mFirebaseAnalytics: FirebaseAnalytics? = null
 	//private var mAdmob: AdMob.Companion? = null
@@ -68,24 +64,8 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		beeperBut = findViewById<View>(R.id.beeperBut) as ToggleButton
 		instrBut = findViewById<View>(R.id.instrBut) as Button
 		hideAdsBut = findViewById<View>(R.id.hideAdsBut) as Button
-		mLoadingView = findViewById<View>(R.id.loading_textview) as TextView
 		mUIRelLay = findViewById<View>(R.id.ui_panels_layout) as RelativeLayout
 		sensTextView = findViewById<View>(R.id.textView3) as TextView
-
-
-		// make buttons yellow
-		instrBut!!.background.setColorFilter(primaryColor, PorterDuff.Mode.MULTIPLY)
-		instrBut!!.setTextColor(Color.WHITE)
-		hideAdsBut!!.background.setColorFilter(primaryColor, PorterDuff.Mode.MULTIPLY)
-		hideAdsBut!!.setTextColor(Color.WHITE)
-		powerBut!!.background.setColorFilter(secondColor, PorterDuff.Mode.MULTIPLY)
-		powerBut!!.setTextColor(Color.WHITE)
-		beeperBut?.background?.setColorFilter(secondColor, PorterDuff.Mode.MULTIPLY)
-		beeperBut!!.setTextColor(Color.WHITE)
-		mLoadingView!!.background.setColorFilter(primaryColor, PorterDuff.Mode.MULTIPLY)
-		mLoadingView!!.setTextColor(Color.WHITE)
-		sensTextView!!.setTextColor(Color.WHITE)
-		sensTextView!!.typeface = Typeface.DEFAULT_BOLD
 
 
 		// power togglebutton releases after ACTION_UP
@@ -234,15 +214,13 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 		saveData()
 
-
 		//Log.d(TAG, "Remove Ads button clicked; launching purchase flow for upgrade.");
-		setWaitScreen(true)
 
-		/* TODO: for security, generate your payload here for verification. See the comments on
+		/* for security, generate your payload here for verification. See the comments on
          *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
          *        an empty string, but on a production app you should carefully generate this. */
-		val payload = "FUCKGOOGLE!"
-/*		mBilling?.mHelper.launchPurchaseFlow(
+/*		val payload = "FUCKGOOGLE!"
+		mBilling?.mHelper.launchPurchaseFlow(
 			this,
 			InAppPurchase.SKU_HIDE_ADS,
 			InAppPurchase.RC_REQUEST,
@@ -253,11 +231,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 	private fun saveData() {
 
-		/*
-         * WARNING: on a real application, we recommend you save data in a secure way to
-         * prevent tampering. For simplicity in this sample, we simply store the data using a
-         * SharedPreferences.
-         */
 		prefsBeeperOn = beeperBut?.isChecked ?: true
 		prefsSensLvl = sensBar?.progress ?: 9
 		prefsMagLocX = StudFView.magPosX.toInt()
@@ -296,15 +269,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		// "Upgrade" button is only visible if the user is not premium
 		hideAdsBut!!.visibility =
 			if (Billing.mHasPurchasedHideAdsUpgrade) View.GONE else View.VISIBLE
-	}
-
-	// Enables or disables the "please wait" screen.
-	override fun setWaitScreen(boo: Boolean) {
-
-		//Log.d(TAG, "setWaitScreen(" + set + ")");
-		mUIRelLay!!.visibility = if (boo) View.GONE else View.VISIBLE
-		mLoadingView!!.visibility = if (boo) View.VISIBLE else View.GONE
-		//alert("setWaitScreen(" + set + ")");
 	}
 
 	override fun alert(str: String?) {
@@ -376,8 +340,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		var prefsMagLocX = 0
 		@JvmField
 		var prefsMagLocY = 0
-		var primaryColor = -0xcccccd
-		var secondColor = -0x888889
 		@JvmField
 		var currentlyDetecting = false
 

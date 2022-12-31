@@ -1,6 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/studfinder_bg"
@@ -13,17 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="0dp" />
-
-    <TextView
-    android:id="@+id/loading_textview"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal|center_vertical"
-    android:text="@string/wait_while_loading"
-    android:background="@color/primary_dark"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:textStyle="bold" />
-
 
     <RelativeLayout
         android:id="@+id/ui_panels_layout"
@@ -44,15 +32,15 @@
                 android:layout_height="wrap_content"
                 android:onClick="onInstructionsButtonPushed"
                 android:text="@string/menu_instructions"
-                style="@style/materialButtStyle" />
+                style="@style/SFButton" />
             <Button
                 android:id="@+id/hideAdsBut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onRemoveAdsPushed"
                 android:text="@string/remove_ads"
-                style="@style/materialButtStyle"
-                android:enabled="false"/>
+                style="@style/SFButton"
+                android:visibility="invisible"/>
 
             <ToggleButton
                 android:id="@+id/beeperBut"
@@ -60,7 +48,6 @@
                 android:layout_height="wrap_content"
                 android:textOn="@string/prefs_beeper_switch"
                 android:textOff="@string/prefs_beeper_switch"
-                style="@style/materialButtStyle"
                 android:onClick="onBeeperToggled" />
 
         </LinearLayout>
@@ -78,7 +65,7 @@
                 android:layout_height="80dp"
                 android:textOn="@string/power_label"
                 android:textOff="@string/power_label"
-                style="@style/materialButtStyle" />
+                style="@style/SFButton" />
 
             <TextView
                 android:id="@+id/textView3"

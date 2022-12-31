@@ -5,20 +5,13 @@
         AppBaseTheme from BOTH res/values/styles.xml and
         res/values-v11/styles.xml on API 14+ devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Material">
-        <!-- API 21 theme customizations can go here. -->
 
-        <!-- Main theme colors -->
-        <!--   your app branding color for the app bar -->
-        <item name="android:colorPrimary">@color/primary</item>
-        <!--   darker variant for the status bar and contextual app bars -->
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <!--   theme UI controls like checkboxes and text fields -->
-        <item name="android:colorAccent">@color/primary</item>
+    <style name="SFButton" parent="ThemeOverlay.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="backgroundTint">@color/dark_grey</item>
+        <item name="colorControlHighlight">@color/light_grey</item>
+        <item name="android:textColor">@color/white</item>
 
-        <!--<item name="android:textColorPrimary">@color/primary_dark</item>-->
-
-        <item name="android:colorButtonNormal">@color/primary_dark</item>
     </style>
 
 
