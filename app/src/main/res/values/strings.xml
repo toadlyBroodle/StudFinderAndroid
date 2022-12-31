@@ -1,0 +1,40 @@
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation" >
+
+    <string name="app_name">Stud Finder</string>
+
+    <string name="power_label">DETECT</string>
+
+    <string name="menu_instructions">INSTRUCTIONS</string>
+    <string name="instructions">
+        1. Hold down the \'Detect\' button until green LED lights up. \n\n
+        2. Locate device\'s magnetometer by moving a coin or other magnetic metal object around back of device until the red LEDs light up in sequence. Then mark this location with the magnetometer icon. \n\n
+        3. Move device along wall while holding \'Detect\' button until red LEDs light up in sequence. \n\n
+        4. Beeper and red LEDs lighting up in sequence indicate a stud directly under your device\'s magnetometer. \n\n
+        5. Adjust sensitivity level for best results: \n
+            -DECREASE sensitivity if green LED doesn\'t stay illuminated while moving device along wall (e.g. thin drywall) \n
+            -INCREASE sensitivity until all red LEDs light up when atop a screw (e.g. thick drywall).
+
+    </string>
+
+    <string name="instr_but_lab">GOT IT!</string>
+    <string name="prefs_beeper_switch">BEEPER</string>
+    <string name="prefs_sensitivity_settings">SENSITIVITY</string>
+
+    <!--    <string name="rate_title">How did we do?</string>
+        <string name="rate_text">Taking a few seconds to rate an app is very important for the developer. It allows us to continually improve users\' experience, and helps others decide whether an app is right for them. \n\n How about telling us what you think?</string>
+        <string name="rate_us">Rate Us :)</string>
+        <string name="rate_maybe_later">Maybe Later.</string>-->
+    <string name="rate_support">SUPPORT</string>
+    <string name="remove_ads">REMOVE ADS</string>
+    <string name="wait_while_loading">LOADING…</string>
+    <string name="minimalist_promo_text">MinimaList is a simple, yet exceptionally powerful, list-making app for organizing your daily todo lists, notes, outlines, thoughts, reminders, etc. into orderly categories and sub-categories, lists and sub-lists. Easily create the perfect nested list structure of MinimaLists to meet your individual minimalistic organizational needs.</string>
+    <string name="minimalist_watch_features_demo">Watch Features Demo</string>
+    <string name="minimalist_promo_premium">***Get 30 days free Premium now!***</string>
+
+
+    <string name="toast_billing_error">Billing error. Please enable Google Play billing and retry.</string>
+    <string name="toast_device_no_subscriptions">Sorry, your device does not support subscriptions.</string>
+
+</resources>

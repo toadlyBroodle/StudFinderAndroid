@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">スタッドファインダー</string>
+    <string name="menu_instructions">説明書</string>
+    <string name="instr_but_lab">了解!</string>
+    <string name="prefs_beeper_switch">ブザー音</string>
+    <string name="prefs_sensitivity_settings">感度</string>
+
+</resources>

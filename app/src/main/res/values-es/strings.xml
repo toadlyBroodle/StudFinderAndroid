@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Encuentra Clavos</string>
+    <string name="menu_instructions">Instrucciones</string>
+    <string name="instr_but_lab">¡Entendido!</string>
+    <string name="prefs_beeper_switch">Beeper</string>
+    <string name="prefs_sensitivity_settings">Sensibilidad</string>
+
+
+</resources>
