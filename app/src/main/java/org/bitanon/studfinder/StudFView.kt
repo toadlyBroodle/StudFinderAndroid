@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.hardware.SensorManager
 import android.hardware.SensorEvent
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import java.lang.Exception
 import kotlin.math.abs
@@ -18,7 +19,7 @@ import kotlin.math.sqrt
 
 class StudFView(context: Context?, attributes: AttributeSet?) : View(context, attributes),
 	SensorEventListener {
-	//val TAG = "StudFView"
+	private val TAG = "StudFView"
 
 	var sensLvl = 9
 	var beepOn = true
@@ -43,7 +44,7 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 	private val paintLEDGreen: Paint
 	private val paintLEDRed1: Paint
 	private val paintLEDRed2: Paint
-	private var beep: MediaPlayer? = null
+	var beep: MediaPlayer? = null
 
 	// touch shit
 	private var viewWidth = 0
@@ -170,71 +171,15 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 			this, mMagFieldListener,
 			SensorManager.SENSOR_DELAY_UI
 		)
-
-		// after 7 run times, every 7 uses prompt to rate unless one of the rate
-		// buttons has been pressed once already
-/*		final int remainder = StudFActivity.prefsRunTimes % 7;
-		if (remainder == 0 && !StudFActivity.prefsRateButsPressed) {
-			AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-			alert.setTitle(R.string.rate_title);
-			alert.setMessage(R.string.rate_text);
-
-			// ignore button
-			alert.setNegativeButton(R.string.rate_maybe_later,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-						}
-					});
-
-			// send to my ca.mmess.studfinder.free website
-			alert.setNeutralButton(R.string.rate_support,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							
-							Uri uri = Uri
-									.parse("http://mmess.ca/ca.mmess.studfinder.free/");
-							Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-							getContext().startActivity(intent);
-
-							// set rate support button to true
-							StudFActivity.prefsRateButsPressed = true;
-						}
-					});
-
-			// send to google play store button
-			alert.setPositiveButton(R.string.rate_us,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							
-							Uri uri = Uri
-									.parse("https://play.google.com/store/apps/details?id=ca.mmess.ca.mmess.studfinder.free");
-							Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-							getContext().startActivity(intent);
-
-							// set rate love it button pressed to true
-							StudFActivity.prefsRateButsPressed = true;
-						}
-					});
-
-			alert.show();
-		}*/
 	}
 
 	fun stopStudFView() {
 
+		// release beep media player
+		beep?.release()
+
 		// unregister sensor listener
 		StudFActivity.mSensorManager!!.unregisterListener(this)
-	}
-
-	private fun playBeep() {
-		try {
-			beep!!.start()
-		} catch (e: Exception) {
-			//FirebaseCrash.report(e)
-		}
 	}
 
 	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -294,9 +239,6 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 	public override fun onDraw(canvas: Canvas) {
 		super.onDraw(canvas)
 
-		// used to draw background here but moved it to layout to save resources
-		// canvas.drawBitmap(mBackground, 0, 0, paintBG);
-
 		// call method to perform calculations on mag field data
 		doCalculationsOnMagData()
 
@@ -347,7 +289,14 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 							alternCounter++
 
 							// activate alarm if preference selected
-							if (beepOn) playBeep()
+							if (beepOn) {
+								try {
+									beep?.start()
+								} catch (e: Exception) {
+									//FirebaseCrash.report(e)
+									Log.d(TAG, "")
+								}
+							}
 						} else {
 							canvas.drawCircle(
 								(this.width / 2).toFloat(),

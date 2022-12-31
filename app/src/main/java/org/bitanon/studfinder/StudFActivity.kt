@@ -29,8 +29,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 	private var sensTextView: TextView? = null
 	private var mUIRelLay: RelativeLayout? = null
 	private var mFirebaseAnalytics: FirebaseAnalytics? = null
-	//private var mAdmob: AdMob.Companion? = null
-	//private var mBilling: Billing.Companion? = null
 
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,12 +61,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		sensTextView = findViewById<View>(R.id.textView3) as TextView
 
 		instrBut?.setOnClickListener {
-			// log event to firebase
-/*			val bundle = Bundle()
-			bundle.putString(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
-			bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, it.resources.getResourceName(it.id))
-			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_instructions")
-			mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)*/
 
 			saveData()
 			showInstructions()
@@ -76,13 +68,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 		beeperBut?.setOnClickListener {
 			mStudFView?.beepOn = it.isActivated
-
-	/*		// log event to firebase
-			val bundle = Bundle()
-			bundle.putString(FirebaseAnalytics.Param.ITEM_ID, v.id.toString())
-			bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, v.resources.getResourceName(v.id))
-			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_beeper")
-			mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)*/
 
 			// show beeper interstitial
 			AdMob.showInterstitial(this)
@@ -103,16 +88,10 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 			}
 			false
 		}
-
-		// direct traffic to MinimaList
-		//showMinimalistPromo()
 	}
 
 	override fun onResume() {
 		super.onResume()
-
-		// Start method tracing, comment this out before publishing
-		//Debug.startMethodTracing("studf_trace");
 
 		// Make sure screen stays on while animation running
 		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -120,11 +99,8 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		// get preferences
 		loadData()
 
-		//firebase test crash, removed before publishing v1.10
-		//FirebaseCrash.report(new Exception("My first Android non-fatal error"));
-
 		// start StudFView
-		mStudFView!!.startStudFView(sensBar?.progress ?: 9,
+		mStudFView?.startStudFView(sensBar?.progress ?: 9,
 			beeperBut?.isChecked ?: true)
 	}
 
@@ -145,33 +121,8 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		prefsRunTimes++
 		saveData()
 
-		//Log.d(TAG, "stopStudFView() called");
 		//Log.d(TAG, "Run times ->" + Integer.toString(prefsRunTimes));
 	}
-
-	public override fun onDestroy() {
-		super.onDestroy()
-/*		try {
-			if (mBilling != null) mBilling?.dispose()
-			mBilling?.mHelper = null
-		} catch (e: Exception) {
-			FirebaseCrash.report(e)
-			e.printStackTrace()
-		}*/
-	}
-
-/*	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-		//Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
-		if (mBilling?.mHelper == null) return
-
-		// Pass on the activity result to the helper for handling
-		if (!mBilling?.mHelper.handleActivityResult(requestCode, resultCode, data)) {
-			// not handled, so handle it ourselves (here's where you'd
-			// perform any handling of activity results not related to in-app
-			// billing...
-			super.onActivityResult(requestCode, resultCode, data)
-		}
-	}*/
 
 	private fun showInstructions() {
 
@@ -185,12 +136,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		}
 
 		// send to my developer website
-		instructions.setNeutralButton(
-			R.string.rate_support
-		) { _, _ -> // log event to firebase
-/*			val bundle = Bundle()
-			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_support")
-			mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)*/
+		instructions.setNeutralButton(R.string.rate_support) { _, _ ->
 			val uri = Uri.parse("https://studfinderapp.com/")
 			val intent = Intent(Intent.ACTION_VIEW, uri)
 			startActivity(intent)
@@ -274,24 +220,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		bld.create().show()
 	}
 
-/*	private fun showAd(type: AdType?) {
-		// if ad not shown in past 30secs then show ad
-		if (hasSufficientTimePassed(adShownTime, Date())) {
-			when (type) {
-				AdType.BEEPER ->                    // show beeper interstitial, if ready and have not purchased hide_ads
-					if (mAdmob!!.mBeeperInsterstitialAd.isLoaded() && !InAppPurchase.mHasPurchasedHideAdsUpgrade) {
-						mAdmob!!.mBeeperInsterstitialAd.show()
-						adShownTime = Date()
-					}
-				AdType.INSTRUCTIONS ->                    // show instructions interstitial, if ready and have not purchased hide_ads
-					if (mAdmob!!.mInstructionsInterstitialAd.isLoaded() && !InAppPurchase.mHasPurchasedHideAdsUpgrade) {
-						mAdmob!!.mInstructionsInterstitialAd.show()
-						adShownTime = Date()
-					}
-				else -> {}
-			}
-		}
-	}*/
 
 /*	private fun showMinimalistPromo() {
 		// show ridiculously convoluted confirmation dialog
