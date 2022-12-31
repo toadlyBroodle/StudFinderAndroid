@@ -11,7 +11,6 @@ import android.hardware.SensorManager
 import android.hardware.SensorEvent
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.view.MotionEventCompat
 import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -19,7 +18,7 @@ import kotlin.math.sqrt
 
 class StudFView(context: Context?, attributes: AttributeSet?) : View(context, attributes),
 	SensorEventListener {
-	val TAG = "StudFView"
+	//val TAG = "StudFView"
 
 	var sensLvl = 9
 	var beepOn = true
@@ -105,24 +104,23 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 	override fun onTouchEvent(ev: MotionEvent): Boolean {
 		when (ev.action) {
 			MotionEvent.ACTION_DOWN -> {
-				val pointerIndex = MotionEventCompat.getActionIndex(ev)
-				val x = MotionEventCompat.getX(ev, pointerIndex)
-				val y = MotionEventCompat.getY(ev, pointerIndex)
+				val pointerIndex = ev.actionIndex
+				val x = ev.getX(pointerIndex)
+				val y = ev.getY(pointerIndex)
 
 				// Remember where we started (for dragging)
 				mLastTouchX = x
 				mLastTouchY = y
 
 				// Save the ID of this pointer (for dragging)
-				mActivePointerId = MotionEventCompat.getPointerId(ev, 0)
+				mActivePointerId = ev.getPointerId(0)
 			}
 			MotionEvent.ACTION_MOVE -> {
 
 				// Find the index of the active pointer and fetch its position
-				val pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId)
-				val x = MotionEventCompat.getX(ev, pointerIndex)
-				val y = MotionEventCompat.getY(ev, pointerIndex)
-
+				val pointerIndex = ev.findPointerIndex(mActivePointerId)
+				val x = ev.getX(pointerIndex)
+				val y = ev.getY(pointerIndex)
 
 				// Calculate the distance moved
 				val dx = x - mLastTouchX
@@ -147,15 +145,15 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 				mActivePointerId = INVALID_POINTER_ID
 			}
 			MotionEvent.ACTION_POINTER_UP -> {
-				val pointerIndex = MotionEventCompat.getActionIndex(ev)
-				val pointerId = MotionEventCompat.getPointerId(ev, pointerIndex)
+				val pointerIndex = ev.actionIndex
+				val pointerId = ev.getPointerId(pointerIndex)
 				if (pointerId == mActivePointerId) {
 					// This was our active pointer going up. Choose a new
 					// active pointer and adjust accordingly.
 					val newPointerIndex = if (pointerIndex == 0) 1 else 0
-					mLastTouchX = MotionEventCompat.getX(ev, newPointerIndex)
-					mLastTouchY = MotionEventCompat.getY(ev, newPointerIndex)
-					mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex)
+					mLastTouchX = ev.getX(newPointerIndex)
+					mLastTouchY = ev.getY(newPointerIndex)
+					mActivePointerId = ev.getPointerId(newPointerIndex)
 				}
 			}
 		}

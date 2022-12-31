@@ -30,14 +30,12 @@
                 android:id="@+id/instrBut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onInstructionsButtonPushed"
                 android:text="@string/menu_instructions"
                 style="@style/SFButton" />
             <Button
                 android:id="@+id/hideAdsBut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onRemoveAdsPushed"
                 android:text="@string/remove_ads"
                 style="@style/SFButton"
                 android:visibility="invisible"/>
@@ -47,8 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textOn="@string/prefs_beeper_switch"
-                android:textOff="@string/prefs_beeper_switch"
-                android:onClick="onBeeperToggled" />
+                android:textOff="@string/prefs_beeper_switch" />
 
         </LinearLayout>
 
@@ -57,7 +54,8 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            tools:ignore="RelativeOverlap">
 
             <ToggleButton
                 android:id="@+id/powerBut"
@@ -75,7 +73,9 @@
                 android:layout_weight="2"
                 android:gravity="center"
                 android:padding="6dp"
-                android:text="@string/prefs_sensitivity_settings"/>
+                android:text="@string/prefs_sensitivity_settings"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <SeekBar
                 android:id="@+id/sensitivityBar"

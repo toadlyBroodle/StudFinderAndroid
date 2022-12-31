@@ -11,12 +11,11 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.*
 
 private const val TAG = "StudFActivity"
-const val SHARED_PREFS = "STUDFINDER_SHARED_PREFS"
+const val SHARED_PREFS = "STUD_FINDER_SHARED_PREFS"
 
 class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
@@ -25,7 +24,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 	var sensBar: SeekBar? = null
 	var beeperBut: ToggleButton? = null
 	private var instrBut: Button? = null
-	private var hideAdsBut: Button? = null
+	//private var hideAdsBut: Button? = null
 
 	private var sensTextView: TextView? = null
 	private var mUIRelLay: RelativeLayout? = null
@@ -40,22 +39,18 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		// Obtain the FirebaseAnalytics instance.
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 		// load in-app billing stuff
-		Billing.init(this, lifecycleScope)
+		//Billing.init(this, lifecycleScope)
 		// load advertising stuff
 		AdMob.init(this)
 
-		// Remove title bar
-		requestWindowFeature(Window.FEATURE_NO_TITLE)
+		// Remove action tool title bar
+		supportActionBar?.hide()
 
 		// Get instance of SensorManager
 		mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
 		// use main layout xml file to display content in activity
 		setContentView(R.layout.activity_main)
-		/** TODO use this to get info regarding deep link from google organic referrals
-		 * can then use this info to modify app based on info via:
-		 * onNewIntent(getIntent());
-		 */
 
 		// get references to all UI elements
 		mStudFView = findViewById<View>(R.id.studf_view) as StudFView
@@ -63,13 +58,38 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		sensBar = findViewById<View>(R.id.sensitivityBar) as SeekBar
 		beeperBut = findViewById<View>(R.id.beeperBut) as ToggleButton
 		instrBut = findViewById<View>(R.id.instrBut) as Button
-		hideAdsBut = findViewById<View>(R.id.hideAdsBut) as Button
+		//hideAdsBut = findViewById<View>(R.id.hideAdsBut) as Button
 		mUIRelLay = findViewById<View>(R.id.ui_panels_layout) as RelativeLayout
 		sensTextView = findViewById<View>(R.id.textView3) as TextView
 
+		instrBut?.setOnClickListener {
+			// log event to firebase
+/*			val bundle = Bundle()
+			bundle.putString(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
+			bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, it.resources.getResourceName(it.id))
+			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_instructions")
+			mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)*/
 
-		// power togglebutton releases after ACTION_UP
-		powerBut!!.setOnTouchListener { v, event ->
+			saveData()
+			showInstructions()
+		}
+
+		beeperBut?.setOnClickListener {
+			mStudFView?.beepOn = it.isActivated
+
+	/*		// log event to firebase
+			val bundle = Bundle()
+			bundle.putString(FirebaseAnalytics.Param.ITEM_ID, v.id.toString())
+			bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, v.resources.getResourceName(v.id))
+			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_beeper")
+			mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)*/
+
+			// show beeper interstitial
+			AdMob.showInterstitial(this)
+		}
+
+		// power toggle button releases after ACTION_UP
+		powerBut!!.setOnTouchListener { _, event ->
 			if (event.action == MotionEvent.ACTION_DOWN) {
 				powerBut!!.isChecked = true
 				currentlyDetecting = true
@@ -115,7 +135,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		saveData()
 
 		// Stop StudFView
-		mStudFView!!.stopStudFView()
+		mStudFView?.stopStudFView()
 	}
 
 	override fun onStop() {
@@ -153,81 +173,56 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		}
 	}*/
 
-	fun onInstructionsButtonPushed(v: View) {
-
-		// log event to firebase
-		val bundle = Bundle()
-		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, v.id.toString())
-		bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, v.resources.getResourceName(v.id))
-		bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_instructions")
-		mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
-		saveData()
-		showInstructions()
-	}
-
 	private fun showInstructions() {
 
 		// display alert containing instructions
 		val instructions = AlertDialog.Builder(this)
 		instructions.setTitle(getString(R.string.menu_instructions))
 		instructions.setMessage(getString(R.string.instructions))
-		instructions.setPositiveButton(getString(R.string.instr_but_lab)) { dialog, whichButton -> // show instructions interstitial
+		instructions.setPositiveButton(getString(R.string.instr_but_lab)) { _, _ ->
+			// show instructions interstitial
 			AdMob.showInterstitial(this)
 		}
 
 		// send to my developer website
 		instructions.setNeutralButton(
 			R.string.rate_support
-		) { dialog, whichButton -> // log event to firebase
-			val bundle = Bundle()
+		) { _, _ -> // log event to firebase
+/*			val bundle = Bundle()
 			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_support")
-			mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
-			val uri = Uri.parse("http://bitanon.org/")
+			mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)*/
+			val uri = Uri.parse("https://studfinderapp.com/")
 			val intent = Intent(Intent.ACTION_VIEW, uri)
 			startActivity(intent)
 		}
 		instructions.show()
 	}
 
-	fun onBeeperToggled(v: View) {
-		mStudFView?.beepOn = v.isActivated
+/*	fun onRemoveAdsPushed(v: View) {
 
-/*		// log event to firebase
-		val bundle = Bundle()
-		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, v.id.toString())
-		bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, v.resources.getResourceName(v.id))
-		bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_beeper")
-		mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)*/
-
-		// show beeper interstitial
-		AdMob.showInterstitial(this)
-	}
-
-	fun onRemoveAdsPushed(v: View) {
-
-/*		// log event to firebase
+		// log event to firebase
 		val bundle = Bundle()
 		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, v.id.toString())
 		bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, v.resources.getResourceName(v.id))
 		bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_remove_ads")
-		mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)*/
+		mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
 
 		saveData()
 
 		//Log.d(TAG, "Remove Ads button clicked; launching purchase flow for upgrade.");
 
-		/* for security, generate your payload here for verification. See the comments on
+		*//* for security, generate your payload here for verification. See the comments on
          *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
-         *        an empty string, but on a production app you should carefully generate this. */
-/*		val payload = "FUCKGOOGLE!"
+         *        an empty string, but on a production app you should carefully generate this. *//*
+		val payload = "FUCKGOOGLE!"
 		mBilling?.mHelper.launchPurchaseFlow(
 			this,
 			InAppPurchase.SKU_HIDE_ADS,
 			InAppPurchase.RC_REQUEST,
 			mBilling?.mPurchaseFinishedListener,
 			payload
-		)*/
-	}
+		)
+	}*/
 
 	private fun saveData() {
 
@@ -267,8 +262,8 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 	override fun updateUi() {
 
 		// "Upgrade" button is only visible if the user is not premium
-		hideAdsBut!!.visibility =
-			if (Billing.mHasPurchasedHideAdsUpgrade) View.GONE else View.VISIBLE
+		//hideAdsBut!!.visibility =
+			//if (Billing.mHasPurchasedHideAdsUpgrade) View.GONE else View.VISIBLE
 	}
 
 	override fun alert(str: String?) {
