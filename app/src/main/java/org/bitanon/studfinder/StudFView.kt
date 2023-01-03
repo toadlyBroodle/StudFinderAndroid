@@ -17,9 +17,9 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
+private const val TAG = "StudFView"
 class StudFView(context: Context?, attributes: AttributeSet?) : View(context, attributes),
 	SensorEventListener {
-	private val TAG = "StudFView"
 
 	var sensLvl = 9
 	var beepOn = true

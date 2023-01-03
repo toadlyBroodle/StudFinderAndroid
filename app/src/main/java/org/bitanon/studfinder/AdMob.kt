@@ -6,15 +6,14 @@ import android.util.Log
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.firebase.BuildConfig
 import java.util.*
 
-const val interstitialId = ""
-const val interstitialTestId = ""
+private const val interstitialId = "ca-app-pub-9043912704472803/5989861145"
+private const val interstitialTestId = "ca-app-pub-3940256099942544/1033173712"
 
+private const val TAG = "AdMob"
 class AdMob {
 	companion object {
-		private val TAG = "AdMob"
 
 		private var adShownTime = Date()
 		var mInterstitialAd: InterstitialAd? = null
@@ -42,51 +41,64 @@ class AdMob {
 					override fun onAdLoaded(interstitialAd: InterstitialAd) {
 						Log.d(TAG, "Ad was loaded.")
 						mInterstitialAd = interstitialAd
+
+						mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+							override fun onAdClicked() {
+								// Called when a click is recorded for an ad.
+								Log.d(TAG, "Ad was clicked.")
+							}
+
+							override fun onAdDismissedFullScreenContent() {
+								// Called when ad is dismissed.
+								Log.d(TAG, "Ad dismissed fullscreen content.")
+								mInterstitialAd = null
+							}
+
+							override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+								// Called when ad fails to show.
+								Log.e(TAG, "Ad failed to show fullscreen content.")
+								mInterstitialAd = null
+							}
+
+							override fun onAdImpression() {
+								// Called when an impression is recorded for an ad.
+								Log.d(TAG, "Ad recorded an impression.")
+							}
+
+							override fun onAdShowedFullScreenContent() {
+								// Called when ad is shown.
+								Log.d(TAG, "Ad showed fullscreen content.")
+							}
+						}
 					}
 				})
-
-			mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-				override fun onAdClicked() {
-					// Called when a click is recorded for an ad.
-					Log.d(TAG, "Ad was clicked.")
-				}
-
-				override fun onAdDismissedFullScreenContent() {
-					// Called when ad is dismissed.
-					Log.d(TAG, "Ad dismissed fullscreen content.")
-					mInterstitialAd = null
-				}
-
-				override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-					// Called when ad fails to show.
-					Log.e(TAG, "Ad failed to show fullscreen content.")
-					mInterstitialAd = null
-				}
-
-				override fun onAdImpression() {
-					// Called when an impression is recorded for an ad.
-					Log.d(TAG, "Ad recorded an impression.")
-				}
-
-				override fun onAdShowedFullScreenContent() {
-					// Called when ad is shown.
-					Log.d(TAG, "Ad showed fullscreen content.")
-				}
-			}
 		}
 
 		fun showInterstitial(activ: Activity?) {
 
-			// if ad not shown in past 45secs, and not premium, then don't show ad
-			if (Billing.mHasPurchasedHideAdsUpgrade &&
-				!hasSufficientTimePassed(adShownTime, Date())
-			)
+			// don't show ad if premium
+			if (Billing.mHasPurchasedHideAdsUpgrade) {
+				Log.d(TAG, "Ad not shown to premium user")
 				return
+			}
+
+			// load new ad if last one is null
+			if (mInterstitialAd == null) {
+				Log.d(TAG, "Ad not shown: not loaded, loading new one")
+				activ?.baseContext?.let { init(it) }
+				return
+			}
+
+			// don't show ad if <45s since last impression
+			if (!hasSufficientTimePassed(adShownTime, Date())) {
+				Log.d(TAG, "Ad not shown: <45s since last")
+				return
+			}
 
 			if (activ != null && mInterstitialAd != null) {
 				mInterstitialAd!!.show(activ)
 			} else {
-				Log.d(TAG, "The interstitial ad wasn't loaded yet.")
+				Log.d(TAG, "Ad not shown: interstitial null")
 			}
 		}
 

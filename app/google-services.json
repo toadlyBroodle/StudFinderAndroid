@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "569898848689",
+    "project_id": "studfinder-e57a8",
+    "storage_bucket": "studfinder-e57a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569898848689:android:64ef73459db135e8bc6d90",
+        "android_client_info": {
+          "package_name": "org.bitanon.studfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569898848689-6tk3kekj0b3kksd46e7n328t5ftu4eih.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzMZurSJkASemec7YrVNRhTRDp8fNYjM4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569898848689-6tk3kekj0b3kksd46e7n328t5ftu4eih.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

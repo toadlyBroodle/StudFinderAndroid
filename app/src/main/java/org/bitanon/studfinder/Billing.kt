@@ -13,10 +13,10 @@ import kotlinx.coroutines.withContext
 
 const val IN_APP_PRODUCT_ID = ""
 
+private const val TAG = "Billing"
 class Billing {
 
 	companion object {
-		private const val TAG = "Billing"
 
 		var billingClient: BillingClient? = null
 		var subscriptionDetails: ProductDetails? = null

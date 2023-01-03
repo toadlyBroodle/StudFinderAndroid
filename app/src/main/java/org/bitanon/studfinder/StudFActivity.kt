@@ -14,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.*
 
-private const val TAG = "StudFActivity"
 const val SHARED_PREFS = "STUD_FINDER_SHARED_PREFS"
 
+private const val TAG = "StudFActivity"
 class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 	private var mStudFView: StudFView? = null
