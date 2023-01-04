@@ -36,10 +36,9 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 		// Obtain the FirebaseAnalytics instance.
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-		// load in-app billing stuff
-		//Billing.init(this, lifecycleScope)
-		// load advertising stuff
+		// load advertising and analytics
 		AdMob.init(this)
+		Firebase()
 
 		// Remove action tool title bar
 		supportActionBar?.hide()
@@ -123,6 +122,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 	}
 
 	private fun showInstructions() {
+		Firebase.logCustomEvent(INSTRUCTIONS_SHOW)
 
 		// display alert containing instructions
 		val instructions = AlertDialog.Builder(this)
@@ -135,38 +135,13 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 		// send to my developer website
 		instructions.setNeutralButton(R.string.rate_support) { _, _ ->
+			Firebase.logCustomEvent(INSTRUCTIONS_SUPPORT_CLICK)
 			val uri = Uri.parse("https://studfinderapp.com/")
 			val intent = Intent(Intent.ACTION_VIEW, uri)
 			startActivity(intent)
 		}
 		instructions.show()
 	}
-
-/*	fun onRemoveAdsPushed(v: View) {
-
-		// log event to firebase
-		val bundle = Bundle()
-		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, v.id.toString())
-		bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, v.resources.getResourceName(v.id))
-		bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button_remove_ads")
-		mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
-
-		saveData()
-
-		//Log.d(TAG, "Remove Ads button clicked; launching purchase flow for upgrade.");
-
-		*//* for security, generate your payload here for verification. See the comments on
-         *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
-         *        an empty string, but on a production app you should carefully generate this. *//*
-		val payload = "FUCKGOOGLE!"
-		mBilling?.mHelper.launchPurchaseFlow(
-			this,
-			InAppPurchase.SKU_HIDE_ADS,
-			InAppPurchase.RC_REQUEST,
-			mBilling?.mPurchaseFinishedListener,
-			payload
-		)
-	}*/
 
 	private fun saveData() {
 
@@ -180,8 +155,6 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		editor.putInt("prefs_run_times", prefsRunTimes)
 		editor.putInt("prefs_mag_loc_x", prefsMagLocX)
 		editor.putInt("prefs_mag_loc_y", prefsMagLocY)
-		editor.putBoolean("prefs_prem", Billing.mHasPurchasedHideAdsUpgrade
-		)
 		editor.apply()
 
 		//Log.d(TAG, "Saved data: hide_ads = " + String.valueOf(mHasPurchasedHideAdsUpgrade));
@@ -196,19 +169,11 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		prefsRunTimes = prefs.getInt("prefs_run_times", 1)
 		prefsMagLocX = prefs.getInt("prefs_mag_loc_x", 80)
 		prefsMagLocY = prefs.getInt("prefs_mag_loc_y", 180)
-		Billing.mHasPurchasedHideAdsUpgrade =
-			prefs.getBoolean("prefs_prem", false)
 
-		//Log.d(TAG, "Loaded data: hide_ads = " + String.valueOf(mHasPurchasedHideAdsUpgrade));
 	}
 
 	// updates UI to reflect model
-	override fun updateUi() {
-
-		// "Upgrade" button is only visible if the user is not premium
-		//hideAdsBut!!.visibility =
-			//if (Billing.mHasPurchasedHideAdsUpgrade) View.GONE else View.VISIBLE
-	}
+	override fun updateUi() {}
 
 	override fun alert(str: String?) {
 		val bld = AlertDialog.Builder(this)

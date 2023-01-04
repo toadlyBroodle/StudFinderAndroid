@@ -35,28 +35,33 @@ class AdMob {
 				adRequest, object : InterstitialAdLoadCallback() {
 					override fun onAdFailedToLoad(adError: LoadAdError) {
 						Log.d(TAG, adError.toString())
+						Firebase.logCustomEvent(AD_INTERSTITIAL_LOAD_FAIL)
 						mInterstitialAd = null
 					}
 
 					override fun onAdLoaded(interstitialAd: InterstitialAd) {
 						Log.d(TAG, "Ad was loaded.")
+						Firebase.logCustomEvent(AD_INTERSTITIAL_LOAD_SUCCESS)
 						mInterstitialAd = interstitialAd
 
 						mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
 							override fun onAdClicked() {
 								// Called when a click is recorded for an ad.
 								Log.d(TAG, "Ad was clicked.")
+								Firebase.logCustomEvent(AD_INTERSTITIAL_CLICK)
 							}
 
 							override fun onAdDismissedFullScreenContent() {
 								// Called when ad is dismissed.
 								Log.d(TAG, "Ad dismissed fullscreen content.")
+								Firebase.logCustomEvent(AD_INTERSTITIAL_DISMISS)
 								mInterstitialAd = null
 							}
 
 							override fun onAdFailedToShowFullScreenContent(p0: AdError) {
 								// Called when ad fails to show.
 								Log.e(TAG, "Ad failed to show fullscreen content.")
+								Firebase.logCustomEvent(AD_INTERSTITIAL_SHOW_FAIL)
 								mInterstitialAd = null
 							}
 
@@ -68,6 +73,7 @@ class AdMob {
 							override fun onAdShowedFullScreenContent() {
 								// Called when ad is shown.
 								Log.d(TAG, "Ad showed fullscreen content.")
+								Firebase.logCustomEvent(AD_INTERSTITIAL_SHOW_SUCCESS)
 							}
 						}
 					}
@@ -75,12 +81,6 @@ class AdMob {
 		}
 
 		fun showInterstitial(activ: Activity?) {
-
-			// don't show ad if premium
-			if (Billing.mHasPurchasedHideAdsUpgrade) {
-				Log.d(TAG, "Ad not shown to premium user")
-				return
-			}
 
 			// load new ad if last one is null
 			if (mInterstitialAd == null) {
@@ -99,6 +99,7 @@ class AdMob {
 				mInterstitialAd!!.show(activ)
 			} else {
 				Log.d(TAG, "Ad not shown: interstitial null")
+				Firebase.logCustomEvent(AD_INTERSTITIAL_SHOW_ERROR)
 			}
 		}
 
