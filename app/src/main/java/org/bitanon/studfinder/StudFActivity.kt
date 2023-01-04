@@ -36,9 +36,8 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 		// Obtain the FirebaseAnalytics instance.
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-		// load advertising and analytics
+		// load advertising
 		AdMob.init(this)
-		Firebase()
 
 		// Remove action tool title bar
 		supportActionBar?.hide()
