@@ -25,12 +25,12 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 	var beepOn = true
 
 	private var mMagFieldListener: Sensor? = StudFActivity.mSensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-	private var magFldArrayX: IntArray? = null
+	private var magFldArrayX: IntArray
 	private val magFldArrayY: IntArray
 	private val magFldArrayZ: IntArray
 	private val currMagFld: IntArray
 	private var nextArrayCount: Int
-	private var modeX: Int? = null
+	private var modeX: Int
 	private var modeY: Int
 	private var modeZ: Int
 	private var sdX: Int
@@ -202,7 +202,7 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 		currMagFld[0] = event.values[0].toInt()
 		currMagFld[1] = event.values[1].toInt()
 		currMagFld[2] = event.values[2].toInt()
-		magFldArrayX?.set(nextArrayCount, currMagFld[0])
+		magFldArrayX[nextArrayCount] = currMagFld[0]
 		magFldArrayY[nextArrayCount] = currMagFld[1]
 		magFldArrayZ[nextArrayCount] = currMagFld[2]
 		nextArrayCount++
@@ -214,25 +214,23 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 	private fun doCalculationsOnMagData() {
 
 		// get modes of field strength arrays
-		modeX = magFldArrayX?.let { mode(it) }
+		modeX = mode(magFldArrayX)
 		modeY = mode(magFldArrayY)
 		modeZ = mode(magFldArrayZ)
 
 		// get standard deviations of field strength arrays
-		sdX = magFldArrayX?.let { stanDev(it) }!!
+		sdX = stanDev(magFldArrayX)
 		sdY = stanDev(magFldArrayY)
 		sdZ = stanDev(magFldArrayZ)
 
 		// find difference between currMagFld reading and mode -> deltaMagFld
-		val deltaMagFldX = modeX?.minus(currMagFld[0])?.let { abs(it) }
+		val deltaMagFldX = abs(modeX - currMagFld[0])
 		val deltaMagFldY = abs(modeY - currMagFld[1])
 		val deltaMagFldZ = abs(modeZ - currMagFld[2])
 
 		// find average standard deviations and delta magnetic field strengths
 		avgSD = (sdX + sdY + sdZ) / 3
-		if (deltaMagFldX != null) {
-			avgDeltaMagFld = (deltaMagFldX + deltaMagFldY + deltaMagFldZ) / 3
-		}
+		avgDeltaMagFld = (deltaMagFldX + deltaMagFldY + deltaMagFldZ) / 3
 
 		// Log.d(TAG, "avgSD ->" + avgSD + "avgDelta ->" + avgDeltaMagFld);
 	}
@@ -290,6 +288,7 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 							alternCounter++
 
 							// activate alarm if preference selected
+							//Log.d(TAG, "beepOn=$beepOn, beep=${beep.toString()}")
 							if (beepOn) {
 								try {
 									beep?.start()

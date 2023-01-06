@@ -63,8 +63,9 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 			showInstructions()
 		}
 
-		beeperBut?.setOnClickListener {
-			mStudFView?.beepOn = it.isActivated
+		beeperBut?.setOnCheckedChangeListener { _, isChecked ->
+
+			mStudFView?.beepOn = isChecked
 
 			// show beeper interstitial
 			AdMob.showInterstitial(this)
@@ -103,21 +104,17 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		mStudFView?.startStudFView(prefsSensLvl, prefsBeeperOn)
 	}
 
-	override fun onPause() {
-		super.onPause()
+	override fun onStop() {
+		super.onStop()
+		// count run times
+		prefsRunTimes++
+		//Log.d(TAG, "Run times ->" + Integer.toString(prefsRunTimes));
 
 		// save preferences to use next time
 		saveData()
 
 		// Stop StudFView
 		mStudFView?.stopStudFView()
-	}
-
-	override fun onStop() {
-		super.onStop()
-		// count run times
-		prefsRunTimes++
-		//Log.d(TAG, "Run times ->" + Integer.toString(prefsRunTimes));
 	}
 
 	private fun showInstructions() {
