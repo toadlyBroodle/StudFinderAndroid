@@ -36,6 +36,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 		// Obtain the FirebaseAnalytics instance.
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+
 		// load advertising
 		AdMob.init(this)
 
