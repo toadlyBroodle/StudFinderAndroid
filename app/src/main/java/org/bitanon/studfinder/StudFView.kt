@@ -25,21 +25,21 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 	var beepOn = true
 
 	private var mMagFieldListener: Sensor? = StudFActivity.mSensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-	private var magFldArrayX: IntArray
-	private val magFldArrayY: IntArray
-	private val magFldArrayZ: IntArray
-	private val currMagFld: IntArray
-	private var nextArrayCount: Int
-	private var modeX: Int
-	private var modeY: Int
-	private var modeZ: Int
-	private var sdX: Int
-	private var sdY: Int
-	private var sdZ: Int
+	private var magFldArrayX: IntArray = IntArray(ARRAYSIZE)
+	private val magFldArrayY: IntArray = IntArray(ARRAYSIZE)
+	private val magFldArrayZ: IntArray = IntArray(ARRAYSIZE)
+	private val currMagFld: IntArray = IntArray(3)
+	private var nextArrayCount: Int = 0
+	private var modeX: Int = 0
+	private var modeY: Int = 0
+	private var modeZ: Int = 0
+	private var sdX: Int = 0
+	private var sdY: Int = 0
+	private var sdZ: Int = 0
 	private var avgSD = 0
 	private var avgDeltaMagFld = 0
-	private var alternCounter: Int
-	private val paintText: Paint
+	private var alternCounter: Int = 0
+	private val paintText: Paint = Paint()
 	private val paintTextSmall: Paint
 	private val paintLEDGreen: Paint
 	private val paintLEDRed1: Paint
@@ -56,22 +56,8 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 	var magnetPainter: Paint
 
 	init {
-		// initialize variables
-		magFldArrayX = IntArray(ARRAYSIZE)
-		magFldArrayY = IntArray(ARRAYSIZE)
-		magFldArrayZ = IntArray(ARRAYSIZE)
-		currMagFld = IntArray(3)
-		modeX = 0
-		modeY = 0
-		modeZ = 0
-		sdX = 0
-		sdY = 0
-		sdZ = 0
-		nextArrayCount = 0
-		alternCounter = 0
 
 		// set paint attributes for late use in onDraw()
-		paintText = Paint()
 		paintText.color = Color.BLACK
 		paintText.strokeWidth = 2f
 		paintText.textSize = 38f
