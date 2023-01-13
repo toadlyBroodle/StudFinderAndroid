@@ -11,14 +11,13 @@ import android.hardware.SensorManager
 import android.hardware.SensorEvent
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 private const val TAG = "StudFView"
-class StudFView(context: Context?, attributes: AttributeSet?) : View(context, attributes),
+class StudFView(context: Context, attributes: AttributeSet?) : CaughtView(context, attributes),
 	SensorEventListener {
 
 	var sensLvl = 9
@@ -40,53 +39,21 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 	private var avgDeltaMagFld = 0
 	private var alternCounter: Int = 0
 	private val paintText: Paint = Paint()
-	private val paintTextSmall: Paint
-	private val paintLEDGreen: Paint
-	private val paintLEDRed1: Paint
-	private val paintLEDRed2: Paint
-	var beep: MediaPlayer? = null
+	private val paintTextSmall: Paint = Paint()
+	private val paintLEDGreen: Paint = Paint()
+	private val paintLEDRed1: Paint = Paint()
+	private val paintLEDRed2: Paint = Paint()
+	private var beep: MediaPlayer? = null
 
-	// touch shit
+	// movable magnetic target stuff
 	private var viewWidth = 0
 	private var viewHeight = 0
 	private var mActivePointerId = INVALID_POINTER_ID
 	private var mLastTouchX = 0f
 	private var mLastTouchY = 0f
-	private var magnetIcon: Bitmap
-	var magnetPainter: Paint
+	private lateinit var magnetIcon: Bitmap
+	var magnetPainter: Paint = Paint()
 
-	init {
-
-		// set paint attributes for late use in onDraw()
-		paintText.color = Color.BLACK
-		paintText.strokeWidth = 2f
-		paintText.textSize = 38f
-		paintText.style = Paint.Style.FILL_AND_STROKE
-		paintTextSmall = Paint()
-		paintTextSmall.color = Color.BLACK
-		paintTextSmall.strokeWidth = 2f
-		paintTextSmall.textSize = 20f
-		paintTextSmall.style = Paint.Style.FILL_AND_STROKE
-		paintLEDGreen = Paint()
-		paintLEDGreen.color = Color.GREEN
-		paintLEDRed1 = Paint()
-		paintLEDRed1.color = Color.RED
-		paintLEDRed2 = Paint()
-		paintLEDRed2.color = Color.rgb(150, 0, 0)
-		magnetPainter = Paint()
-		magnetIcon = BitmapFactory.decodeResource(resources, R.drawable.magnet)
-		// get magnet location preferences
-		magPosX = StudFActivity.prefsMagLocX.toFloat()
-		magPosY = StudFActivity.prefsMagLocY.toFloat()
-
-		// beep stuff
-		try {
-			beep = MediaPlayer.create(context, R.raw.beep)
-		} catch (e: Exception) {
-			//FirebaseCrash.report(e)
-			Log.d(TAG, "Error creating beep: $e")
-		}
-	}
 
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onTouchEvent(ev: MotionEvent): Boolean {
@@ -148,10 +115,35 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 		return true
 	}
 
-	fun startStudFView(sensitivity: Int, beep: Boolean) {
+	fun startStudFView(sensitivity: Int, beepOn: Boolean) {
 
 		sensLvl = sensitivity
-		beepOn = beep
+		this.beepOn = beepOn
+
+		// set paint attributes for late use in onDraw()
+		paintText.color = Color.BLACK
+		paintText.strokeWidth = 2f
+		paintText.textSize = 38f
+		paintText.style = Paint.Style.FILL_AND_STROKE
+		paintTextSmall.color = Color.BLACK
+		paintTextSmall.strokeWidth = 2f
+		paintTextSmall.textSize = 20f
+		paintTextSmall.style = Paint.Style.FILL_AND_STROKE
+		paintLEDGreen.color = Color.GREEN
+		paintLEDRed1.color = Color.RED
+		paintLEDRed2.color = Color.rgb(150, 0, 0)
+		magnetIcon = BitmapFactory.decodeResource(resources, R.drawable.magnet)
+		// get magnet location preferences
+		magPosX = StudFActivity.prefsMagLocX.toFloat()
+		magPosY = StudFActivity.prefsMagLocY.toFloat()
+
+		// beep stuff
+		try {
+			beep = MediaPlayer.create(context, R.raw.beep)
+		} catch (e: Exception) {
+			//FirebaseCrash.report(e)
+			Log.d(TAG, "Error creating beep: $e")
+		}
 
 		// register sensor listener
 		StudFActivity.mSensorManager!!.registerListener(
@@ -279,8 +271,7 @@ class StudFView(context: Context?, attributes: AttributeSet?) : View(context, at
 								try {
 									beep?.start()
 								} catch (e: Exception) {
-									//FirebaseCrash.report(e)
-									Log.d(TAG, "Error playing beep: $e")
+									Log.d(TAG, "Error playing beep")
 								}
 							}
 						} else {

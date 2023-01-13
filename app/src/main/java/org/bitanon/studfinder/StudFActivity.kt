@@ -2,12 +2,10 @@ package org.bitanon.studfinder
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -16,8 +14,8 @@ import java.util.*
 
 const val SHARED_PREFS = "STUD_FINDER_SHARED_PREFS"
 
-private const val TAG = "StudFActivity"
-class StudFActivity : AppCompatActivity(), ParentListenerInterface {
+//private const val TAG = "StudFActivity"
+class StudFActivity : AppCompatActivity() {
 
 	private var mStudFView: StudFView? = null
 	private var powerBut: ToggleButton? = null
@@ -68,9 +66,23 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 
 			mStudFView?.beepOn = isChecked
 
+			// save preferences before ad shows and resets widget state
+			savePrefs()
+
 			// show beeper interstitial
 			AdMob.showInterstitial(this)
 		}
+
+		sensBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+			override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+				// update sensitivity level
+				mStudFView?.sensLvl = progress
+				// save setting to preferences
+				savePrefs()
+			}
+			override fun onStartTrackingTouch(seekBar: SeekBar) {}
+			override fun onStopTrackingTouch(seekBar: SeekBar) {}
+		})
 
 		// power toggle button releases after ACTION_UP
 		powerBut!!.setOnTouchListener { _, event ->
@@ -96,8 +108,8 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
 		// get preferences
-		loadData()
-		// set preferences
+		loadPrefs()
+		// set widgets from prefs
 		sensBar?.progress = prefsSensLvl
 		beeperBut?.isChecked = prefsBeeperOn
 
@@ -111,8 +123,8 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		prefsRunTimes++
 		//Log.d(TAG, "Run times ->" + Integer.toString(prefsRunTimes));
 
-		// save preferences to use next time
-		saveData()
+		// save preferences to load next time
+		savePrefs()
 
 		// Stop StudFView
 		mStudFView?.stopStudFView()
@@ -140,7 +152,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		instructions.show()
 	}
 
-	private fun saveData() {
+	private fun savePrefs() {
 
 		prefsBeeperOn = beeperBut?.isChecked ?: true
 		prefsSensLvl = sensBar?.progress ?: 9
@@ -153,11 +165,9 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		editor.putInt("prefs_mag_loc_x", prefsMagLocX)
 		editor.putInt("prefs_mag_loc_y", prefsMagLocY)
 		editor.apply()
-
-		//Log.d(TAG, "Saved data: hide_ads = " + String.valueOf(mHasPurchasedHideAdsUpgrade));
 	}
 
-	private fun loadData() {
+	private fun loadPrefs() {
 
 		// get shared preferences
 		val prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
@@ -166,20 +176,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		prefsRunTimes = prefs.getInt("prefs_run_times", 1)
 		prefsMagLocX = prefs.getInt("prefs_mag_loc_x", 80)
 		prefsMagLocY = prefs.getInt("prefs_mag_loc_y", 180)
-
 	}
-
-	// updates UI to reflect model
-	override fun updateUi() {}
-
-	override fun alert(str: String?) {
-		val bld = AlertDialog.Builder(this)
-		bld.setMessage(str)
-		bld.setNeutralButton("OK", null)
-		Log.d(TAG, "Showing alert dialog: $str")
-		bld.create().show()
-	}
-
 
 /*	private fun showMinimalistPromo() {
 		// show ridiculously convoluted confirmation dialog
@@ -226,7 +223,7 @@ class StudFActivity : AppCompatActivity(), ParentListenerInterface {
 		@JvmField
 		var currentlyDetecting = false
 
-		fun showToast(ctx: Context, message: String) =
-			Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show()
+		//fun showToast(ctx: Context, message: String) =
+		//	Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show()
 	}
 }
