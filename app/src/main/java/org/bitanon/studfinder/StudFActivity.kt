@@ -171,44 +171,12 @@ class StudFActivity : AppCompatActivity() {
 
 		// get shared preferences
 		val prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
-		prefsBeeperOn = prefs.getBoolean("prefs_beeper_switch", false)
+		prefsBeeperOn = prefs.getBoolean("prefs_beeper_switch", true)
 		prefsSensLvl = prefs.getInt("prefs_sensitivity_level", 10)
 		prefsRunTimes = prefs.getInt("prefs_run_times", 1)
 		prefsMagLocX = prefs.getInt("prefs_mag_loc_x", 80)
 		prefsMagLocY = prefs.getInt("prefs_mag_loc_y", 180)
 	}
-
-/*	private fun showMinimalistPromo() {
-		// show ridiculously convoluted confirmation dialog
-		val inflater = layoutInflater
-		val dialog = AlertDialog.Builder(this)
-		val dView = inflater.inflate(R.layout.minimalist_promo, null)
-		dialog.setView(dView)
-		dialog.setTitle("Download MinimaList")
-		dialog.setMessage("Organize your life like a minimalist.")
-		dialog.setPositiveButton("Try It") { dialog, which -> openStorePage() }
-		dialog.setNegativeButton("Later", null)
-		dialog.show()
-	}
-
-	private fun openStorePage() {
-		val uri = Uri.parse("https://jg5ms.app.goo.gl/MPZf")
-		val goToMarket = Intent(Intent.ACTION_VIEW, uri)
-		// for >v21, send to play store via minimaList's dynamic link, and put new activity on backstack
-		goToMarket.addFlags(
-			Intent.FLAG_ACTIVITY_NO_HISTORY or
-					Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-					Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-		)
-		try {
-			startActivity(goToMarket)
-		} catch (ignore: Exception) {
-		}
-	}
-
-	fun onMinimalistWatchDemo(view: View?) {
-		startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://jg5ms.app.goo.gl/tEi4")))
-	}*/
 
 	companion object {
 		@JvmField

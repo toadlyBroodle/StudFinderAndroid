@@ -36,7 +36,6 @@
                 android:id="@+id/hideAdsBut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/remove_ads"
                 style="@style/SFButton"
                 android:visibility="invisible"/>
 

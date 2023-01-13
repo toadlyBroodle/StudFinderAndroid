@@ -22,19 +22,7 @@
     <string name="prefs_beeper_switch">BEEPER</string>
     <string name="prefs_sensitivity_settings">SENSITIVITY</string>
 
-    <!--    <string name="rate_title">How did we do?</string>
-        <string name="rate_text">Taking a few seconds to rate an app is very important for the developer. It allows us to continually improve users\' experience, and helps others decide whether an app is right for them. \n\n How about telling us what you think?</string>
-        <string name="rate_us">Rate Us :)</string>
-        <string name="rate_maybe_later">Maybe Later.</string>-->
     <string name="rate_support">SUPPORT</string>
-    <string name="remove_ads">REMOVE ADS</string>
     <string name="wait_while_loading">LOADING…</string>
-    <string name="minimalist_promo_text">MinimaList is a simple, yet exceptionally powerful, list-making app for organizing your daily todo lists, notes, outlines, thoughts, reminders, etc. into orderly categories and sub-categories, lists and sub-lists. Easily create the perfect nested list structure of MinimaLists to meet your individual minimalistic organizational needs.</string>
-    <string name="minimalist_watch_features_demo">Watch Features Demo</string>
-    <string name="minimalist_promo_premium">***Get 30 days free Premium now!***</string>
-
-
-    <string name="toast_billing_error">Billing error. Please enable Google Play billing and retry.</string>
-    <string name="toast_device_no_subscriptions">Sorry, your device does not support subscriptions.</string>
 
 </resources>
