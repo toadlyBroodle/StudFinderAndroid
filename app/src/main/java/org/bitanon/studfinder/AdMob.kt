@@ -98,9 +98,9 @@ class AdMob {
 				return
 			}
 
-			// don't show ad if <45s since last impression
+			// don't show ad if <60s since last impression
 			if (!hasSufficientTimePassed(adShownTime, Date())) {
-				Log.d(TAG, "Ad not shown: <45s since last")
+				Log.d(TAG, "Ad not shown: <60s since last")
 				return
 			}
 
@@ -116,7 +116,7 @@ class AdMob {
 			val t2: Int = (d2.time % (24 * 60 * 60 * 1000L)).toInt()
 
 			//Log.d(TAG, "time diff = " + (t2 - t1));
-			return if (t2 - t1 > 45000) {
+			return if (t2 - t1 > 60000) {
 				// update ad last shown time
 				adShownTime = d2
 				true
