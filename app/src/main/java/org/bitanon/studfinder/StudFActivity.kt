@@ -70,7 +70,7 @@ class StudFActivity : AppCompatActivity() {
 			savePrefs()
 
 			// show beeper interstitial
-			AdMob.showInterstitial(this)
+			//AdMob.showInterstitial(this)
 		}
 
 		sensBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
@@ -95,7 +95,7 @@ class StudFActivity : AppCompatActivity() {
 				powerBut!!.isPressed = false
 
 				// show detect interstitial after power button released
-				AdMob.showInterstitial(this)
+				//AdMob.showInterstitial(this)
 			}
 			false
 		}

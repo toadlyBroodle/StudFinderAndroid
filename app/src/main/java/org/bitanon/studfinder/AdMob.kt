@@ -3,10 +3,10 @@ package org.bitanon.studfinder
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import com.google.android.datatransport.runtime.BuildConfig
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import java.util.*
 
 private const val interstitialId = "ca-app-pub-9043912704472803/5989861145"
 private const val interstitialTestId = "ca-app-pub-3940256099942544/1033173712"
@@ -16,7 +16,7 @@ class AdMob {
 	companion object {
 
 		private var adId: String? = null
-		private var adShownTime = Date()
+		//private var adShownTime = Date()
 		var mInterstitialAd: InterstitialAd? = null
 
 		fun init(ctx: Context) {
@@ -99,19 +99,19 @@ class AdMob {
 			}
 
 			// don't show ad if <60s since last impression
-			if (!hasSufficientTimePassed(adShownTime, Date())) {
+			/*if (!hasSufficientTimePassed(adShownTime, Date())) {
 				Log.d(TAG, "Ad not shown: <60s since last")
 				return
-			}
+			}*/
 
-			if (activ != null && mInterstitialAd != null) {
+			if (activ != null) {
 				mInterstitialAd!!.show(activ)
 			} else {
 				Firebase.logCustomEvent(AD_INTERSTITIAL_SHOW_ERROR)
 			}
 		}
 
-		private fun hasSufficientTimePassed(d1: Date, d2: Date): Boolean {
+		/*private fun hasSufficientTimePassed(d1: Date, d2: Date): Boolean {
 			val t1: Int = (d1.time % (24 * 60 * 60 * 1000L)).toInt()
 			val t2: Int = (d2.time % (24 * 60 * 60 * 1000L)).toInt()
 
@@ -121,6 +121,6 @@ class AdMob {
 				adShownTime = d2
 				true
 			} else false
-		}
+		}*/
 	}
 }
